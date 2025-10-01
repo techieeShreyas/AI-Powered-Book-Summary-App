@@ -1,0 +1,124 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Book Summarizer</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'summarizer/style.css' %}" />
+  </head>
+  <body>
+    <div class="container py-5">
+      <h1 class="text-center mb-4">📚 Book Summarizer</h1>
+
+      <form method="POST" enctype="multipart/form-data" class="mb-4">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="pdf_file" class="form-label">Upload your PDF</label>
+          <input
+            class="form-control"
+            type="file"
+            id="pdf_file"
+            name="pdf_file"
+            accept=".pdf"
+            required
+          />
+        </div>
+
+        <!-- Summary Type Selection -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Choose Summary Type</label>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="summary_type"
+              id="general"
+              value="general"
+              checked
+            />
+            <label class="form-check-label" for="general">
+              📄 General Summary
+            </label>
+          </div>
+          <div class="form-check">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="summary_type"
+              id="custom"
+              value="custom"
+            />
+            <label class="form-check-label" for="custom">
+              🎯 Role & Interest Based Summary
+            </label>
+          </div>
+        </div>
+
+        <!-- Role Selection -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Select Your Role</label>
+          <select class="form-select" name="role" id="roleSelect" disabled>
+            <option value="" disabled selected>-- Choose a Role --</option>
+            <option value="student">🎓 Student</option>
+            <option value="professional">💼 Professional</option>
+            <option value="general">📖 General Reader</option>
+          </select>
+        </div>
+
+        <!-- Interest Selection -->
+        <div class="mb-3">
+          <label class="form-label fw-semibold">Choose Your Interest</label>
+          <select
+            class="form-select"
+            name="interest"
+            id="interestSelect"
+            disabled
+          >
+            <option value="" disabled selected>-- Choose Interest --</option>
+            <option value="motivation">🔥 Motivation</option>
+            <option value="inspiration">🌟 Inspiration</option>
+            <option value="relationship">❤️ Relationship</option>
+            <option value="adventure">🏞 Adventure</option>
+            <option value="leadership">👑 Leadership</option>
+          </select>
+        </div>
+
+        <script>
+          // Enable/Disable role & interest dropdowns based on summary type
+          const general = document.getElementById("general");
+          const custom = document.getElementById("custom");
+          const roleSelect = document.getElementById("roleSelect");
+          const interestSelect = document.getElementById("interestSelect");
+
+          function toggleDropdowns() {
+            if (custom.checked) {
+              roleSelect.disabled = false;
+              interestSelect.disabled = false;
+            } else {
+              roleSelect.disabled = true;
+              interestSelect.disabled = true;
+            }
+          }
+
+          general.addEventListener("change", toggleDropdowns);
+          custom.addEventListener("change", toggleDropdowns);
+        </script>
+        <button type="submit" class="btn btn-primary">Summarize</button>
+      </form>
+
+      {% if summary %}
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title">📄 Summary:</h5>
+          <pre class="summary-text">{{ summary|safe }}</pre>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+  </body>
+</html>

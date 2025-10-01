@@ -1,0 +1,14 @@
+body {
+    background-color: #f7f9fc;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+h1 {
+    color: #1f3c88;
+}
+
+.summary-text {
+    white-space: pre-wrap; /* preserves bullet points */
+    font-size: 1rem;
+    color: #333;
+}
